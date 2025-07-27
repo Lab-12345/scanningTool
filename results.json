@@ -1,0 +1,14 @@
+[
+    {
+        "type": "Software and Data Integrity Failures",
+        "severity": "Medium",
+        "evidence": "Missing Content-Security-Policy header",
+        "url": "https://crypto.com/exchange"
+    },
+    {
+        "type": "Server-Side Request Forgery (SSRF)",
+        "severity": "Critical",
+        "evidence": "SSRF payload 'http://169.254.169.254/latest/meta-data/' returned sensitive data",
+        "url": "https://crypto.com/exchange"
+    }
+]

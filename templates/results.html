@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan Results</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f4f4f4;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            width: 100%;
+            max-width: 800px;
+        }
+        li {
+            margin: 10px 0;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .high {
+            background-color: #ffcccc;
+        }
+        .critical {
+            background-color: #ff9999;
+        }
+        .medium {
+            background-color: #ffffcc;
+        }
+        .low {
+            background-color: #e6f3ff;
+        }
+        .error {
+            color: red;
+            text-align: center;
+        }
+        .no-vulns {
+            text-align: center;
+            color: #555;
+        }
+        a, button {
+            display: inline-block;
+            padding: 8px 16px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        a:hover, button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Scan Results</h1>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+    {% if vulnerabilities %}
+        <ul>
+        {% for vuln in vulnerabilities %}
+            <li class="{{ vuln.severity.lower() }}">
+                {{ vuln.type }} (Severity: {{ vuln.severity }}): {{ vuln.evidence }}
+                {% if vuln.form_action %} (Form Action: {{ vuln.form_action }}) {% endif %}
+                {% if vuln.input %} (Input: {{ vuln.input }}) {% endif %}
+                {% if vuln.url %} (URL: {{ vuln.url }}) {% endif %}
+            </li>
+        {% endfor %}
+        </ul>
+        <button onclick="downloadReport()">Download Report</button>
+    {% else %}
+        <p class="no-vulns">No vulnerabilities found.</p>
+    {% endif %}
+    <a href="/">Scan another URL</a>
+
+    <script>
+        function downloadReport() {
+            // Collect vulnerabilities from the displayed list
+            const vulnerabilities = document.querySelectorAll('ul li');
+            let reportContent = "Web Vulnerability Scanner Report\n";
+            const now = new Date();
+            reportContent += `Generated on: ${now.toISOString().slice(0, 19).replace('T', ' ')}\n`;
+            reportContent += `URL Scanned: {{ scanned_url | e }}\n\n`;
+            reportContent += "Vulnerabilities Found:\n";
+            reportContent += "--------------------\n";
+
+            if (vulnerabilities.length === 0) {
+                reportContent += "No vulnerabilities found.\n";
+            } else {
+                vulnerabilities.forEach((vuln, index) => {
+                    reportContent += `${index + 1}. ${vuln.textContent.trim()}\n`;
+                });
+            }
+
+            // Create and download the report
+            const blob = new Blob([reportContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'report.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>

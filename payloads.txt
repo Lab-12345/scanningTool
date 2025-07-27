@@ -1,0 +1,5 @@
+<script>alert('XSS')</script>
+"><img src=x onerror=alert('XSS')>
+<img src='javascript:alert(1)'>
+' OR '1'='1
+1; DROP TABLE users; --
