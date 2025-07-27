@@ -1,139 +1,65 @@
-Web Vulnerability Scanner
+# Web Vulnerability Scanner
 
-Overview
+## Overview
 
-This project is a web vulnerability scanner developed to identify vulnerabilities listed in the OWASP Top 10, with a focus on Cross-Site Scripting (XSS) and Cross-Site Request Forgery (CSRF). The scanner was tested on the Damn Vulnerable Web Application (DVWA) hosted locally via XAMPP at http://localhost/DVWA-master/DVWA-master/. It aims to provide a user-friendly tool with optimized performance and downloadable reports.
+A Python-based web vulnerability scanner designed to detect OWASP Top 10 vulnerabilities, focusing on XSS and CSRF. Tested on Damn Vulnerable Web Application (DVWA) hosted via XAMPP at `http://localhost/DVWA-master/DVWA-master/`.
 
-Features
+## Features
 
+- Detects reflected/DOM-based XSS, CSRF, SQL Injection, and Cryptographic Failures.
+- Optimized with limited payloads (3), forms (1), inputs (1), and 3-second timeout.
+- User-friendly Flask-based UI (`index.html`) with downloadable reports (`results.html`).
+- Fixes for `strftime` errors and incorrect `form_action` reporting.
 
+## Tools
 
+- **Python**: Core logic.
+- **Flask**: Web interface.
+- **Requests**: HTTP crawling.
+- **BeautifulSoup**: HTML parsing.
+- **HTML/JavaScript**: UI and report download.
+- **XAMPP**: Local DVWA hosting.
 
+## Installation
 
-Vulnerability Detection: Identifies reflected payloads and DOM-based XSS (e.g., patterns like eval and innerHTML in scripts).
+1. Install Python 3.x and XAMPP.
+2. Set up DVWA in XAMPP.
+3. Install dependencies:
 
+   ```bash
+   pip install flask requests beautifulsoup4
+   ```
+4. Clone and run:
 
+   ```bash
+   git clone <repository-url>
+   cd vuln-scan
+   python app.py
+   ```
 
-Optimized Performance: Reduces scan time to under 3 seconds by limiting payloads and form submissions.
+## Usage
 
+- Access `http://localhost:5000`.
+- Input target URL (e.g., `http://localhost/DVWA-master/DVWA-master/`).
+- Run scan and download report from `results.html`.
 
+## Implementation
 
-User Interface: Includes a centered index.html and a downloadable report feature in results.html.
+- **Crawling**: Extracts forms, inputs, links, headers, scripts.
+- **Payload Injection**: Tests payloads like `<script>alert("XSS")</script>`.
+- **Detection**: Analyzes responses for reflected payloads and scripts for DOM-based XSS.
+- **Optimizations**: Limits requests for faster scans.
+- **Fixes**: Corrects HSTS and `strftime` issues.
 
+## Testing
 
+- Tested on DVWA endpoints: `/vulnerabilities/csrf/`, `/xss_d/`.
+- Detected issues: Missing HSTS, DOM-based XSS, CSRF.
 
-Error Fixes:
+## Author
 
+Laba Kumar Kalita
 
+## License
 
-
-
-Resolved strftime errors by using JavaScript Date.toISOString().
-
-
-
-Fixed incorrect HSTS reporting linked to login.php by adding a URL field.
-
-Installation
-
-
-
-
-
-Clone the repository:
-
-git clone <repository-url>
-
-
-
-Set up a local web server (e.g., XAMPP) and host the DVWA application at http://localhost/DVWA-master/DVWA-master/.
-
-
-
-Place the scanner files in the appropriate directory within your web server.
-
-
-
-Access the scanner through your browser at the configured URL.
-
-Usage
-
-
-
-
-
-Navigate to the scanner's index.html in your browser.
-
-
-
-Enter the target URL (e.g., http://localhost/DVWA-master/DVWA-master/vulnerabilities/).
-
-
-
-Run the scan and view results in the browser or download the report from results.html.
-
-Challenges and Solutions
-
-
-
-
-
-Slow Scans: Optimized by limiting payloads and form submissions to achieve scan times under 3 seconds.
-
-
-
-DOM-based XSS Detection: Implemented script pattern analysis to detect vulnerabilities like eval and innerHTML.
-
-
-
-Incorrect URL Reporting: Fixed HSTS misreporting by adding a dedicated URL field.
-
-
-
-Template Errors: Replaced strftime with Date.toISOString() for consistent timestamp handling.
-
-Future Enhancements
-
-
-
-
-
-Add advanced CSRF detection mechanisms.
-
-
-
-Expand support for additional OWASP Top 10 vulnerabilities.
-
-
-
-Improve UI for better user interaction and accessibility.
-
-Testing
-
-The scanner was tested on:
-
-
-
-
-
-Environment: Local XAMPP server
-
-
-
-Target: DVWA at http://localhost/DVWA-master/DVWA-master/vulnerabilities/
-
-
-
-Date: July 8, 2025
-
-Author
-
-
-
-
-
-Submitted by: Laba Kumar Kalita
-
-License
-
-This project is licensed under the MIT License.
+MIT License
